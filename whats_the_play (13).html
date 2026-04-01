@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What's the Play?</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:15px;line-height:1.6;color:#1a1a1a;background:#fff;padding:2rem 1rem}
+.wrap{max-width:680px;margin:0 auto}
+.pbar{height:3px;background:#e5e7eb;border-radius:2px;margin-bottom:2rem}
+.pfill{height:100%;background:#1D9E75;border-radius:2px;transition:width 0.4s}
+.eyebrow{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#1D9E75;margin-bottom:0.7rem}
+.big-title{font-size:24px;font-weight:600;line-height:1.25;margin-bottom:1rem}
+.body-text{font-size:14px;color:#555;line-height:1.75;margin-bottom:1.1rem}
+.body-text p{margin-bottom:0.75rem}
+.body-text p:last-child{margin-bottom:0}
+.body-text strong{color:#1a1a1a;font-weight:600}
+.divider{height:1px;background:#e5e7eb;margin:1.25rem 0}
+.sec-lbl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:#888;margin-bottom:0.65rem}
+.pills{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:1rem}
+.pill{font-size:12px;padding:4px 10px;border-radius:20px;background:#E1F5EE;border:1px solid #9FE1CB;color:#085041}
+.pill.gray{background:#f3f4f6;border-color:#d1d5db;color:#6b7280}
+.intro-note{font-size:13px;color:#666;line-height:1.65;margin-bottom:1.5rem}
+.qlbl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:#888;margin-bottom:0.4rem}
+.qtext{font-size:18px;font-weight:600;line-height:1.4;margin-bottom:0.4rem}
+.hint{font-size:13px;color:#666;line-height:1.7;margin-bottom:1.3rem}
+.hint strong{color:#1a1a1a;font-weight:600}
+.opts{display:flex;flex-direction:column;gap:8px;margin-bottom:1.4rem}
+.opt{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;border:1px solid #d1d5db;border-radius:8px;cursor:pointer;background:#fff;text-align:left;width:100%;transition:border-color 0.15s,background 0.15s}
+.opt:hover{border-color:#9ca3af;background:#f9fafb}
+.opt.sel{border-color:#1D9E75;background:#E1F5EE}
+.ring{width:17px;height:17px;border-radius:50%;border:1.5px solid #d1d5db;flex-shrink:0;margin-top:3px;display:flex;align-items:center;justify-content:center;transition:all 0.15s}
+.opt.sel .ring{background:#1D9E75;border-color:#1D9E75}
+.dot{width:6px;height:6px;border-radius:50%;background:white;display:none}
+.opt.sel .dot{display:block}
+.ot{font-size:14px;line-height:1.5;color:#1a1a1a}
+.os{display:block;font-size:12px;color:#888;margin-top:2px;line-height:1.45}
+.opt.sel .os{color:#0F6E56}
+.nav{display:flex;gap:10px}
+.btn{padding:8px 20px;border-radius:8px;font-size:14px;cursor:pointer;border:1px solid #d1d5db;background:#fff;color:#1a1a1a;transition:background 0.15s;font-family:inherit}
+.btn:hover{background:#f3f4f6}
+.btn.pri{background:#1D9E75;border-color:#1D9E75;color:white;font-weight:600}
+.btn.pri:hover{background:#0F6E56}
+.btn:disabled{opacity:0.3;cursor:not-allowed}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;margin-bottom:1rem;letter-spacing:0.02em}
+.rtitle{font-size:21px;font-weight:600;margin-bottom:0.8rem;line-height:1.3}
+.rintro{font-size:15px;line-height:1.75;color:#555;margin-bottom:1rem;border-left:3px solid #1D9E75;padding-left:14px}
+.rintro.amb{border-left-color:#EF9F27}
+.rintro.red{border-left-color:#E24B4A}
+.tcards{display:flex;flex-direction:column;gap:8px;margin-bottom:0.5rem}
+.tc{border:1px solid #d1d5db;border-radius:8px;padding:11px 14px;background:#fff}
+.tc.pri{border-color:#1D9E75;background:#E1F5EE}
+.tct{font-size:13px;font-weight:600;margin-bottom:3px;color:#1a1a1a}
+.tc.pri .tct{color:#085041}
+.tcb{font-size:12px;color:#666;line-height:1.6}
+.tc.pri .tcb{color:#0F6E56}
+.steps{display:flex;flex-direction:column;gap:9px;margin-bottom:0.5rem}
+.si{display:flex;gap:11px;align-items:flex-start}
+.sn{width:21px;height:21px;border-radius:50%;background:#E1F5EE;color:#085041;font-size:11px;font-weight:600;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.st{font-size:13px;line-height:1.6;color:#1a1a1a;padding-top:2px}
+.co{border-radius:0 8px 8px 0;padding:11px 14px;font-size:13px;line-height:1.65;margin-bottom:0.75rem}
+.co.amb{background:#FAEEDA;color:#412402;border-left:3px solid #EF9F27}
+.co.grn{background:#E1F5EE;color:#085041;border-left:3px solid #1D9E75}
+.co.blu{background:#E6F1FB;color:#042C53;border-left:3px solid #378ADD}
+.co strong{font-weight:600}
+.sumbox{background:#f9fafb;border-radius:8px;padding:13px 15px;margin-bottom:1.5rem;font-size:12px;line-height:1.6;border:1px solid #e5e7eb}
+.sumtitle{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:#888;margin-bottom:8px}
+.srow{display:flex;gap:10px;margin-bottom:4px;flex-wrap:wrap}
+.slbl{color:#888;min-width:140px;flex-shrink:0}
+.sval{color:#1a1a1a;font-weight:600;flex:1}
+.pnote{background:#f9fafb;border-radius:8px;padding:13px 15px;margin-top:1.25rem;font-size:13px;line-height:1.65;color:#666;border:1px solid #e5e7eb}
+.pnote strong{color:#1a1a1a;font-weight:600}
+.restart{margin-top:1.75rem;padding-top:1.25rem;border-top:1px solid #e5e7eb}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="pbar"><div class="pfill" id="pf" style="width:0%"></div></div>
+  <div id="scr"></div>
+  <div id="res" style="display:none"></div>
+</div>
+<script>
+const S={phase:'intro',step:0,a:{}};
+
+const Q=[
+  {id:'goal',lbl:'Your goal',
+   q:'What are you trying to accomplish?',
+   hint:'Pick the one that best matches your main goal right now. <strong>A note on terminology:</strong> "Legislators" means people currently serving in the legislature. Candidates who are not currently serving are distinct — that distinction matters for which programs are available. Any legislator you would target through this kind of work is also a candidate by definition. The meaningful question is whether your targets are currently serving.',
+   opts:[
+    {v:'influence',  t:'Influence legislators\' and/or candidates\' positions on MAID', s:'Move people toward support — whether currently serving or running for office'},
+    {v:'find_pos',   t:'Find out where legislators or candidates stand on MAID',        s:'You need position intelligence you don\'t currently have'},
+    {v:'support',    t:'Help a pro-MAID candidate get elected',                         s:'Positions are known — you want to engage in the race'},
+    {v:'engage_vol', t:'Engage or mobilize our volunteer base',                         s:'Keep supporters active and connected between sessions'},
+   ]},
+
+  {id:'targets',lbl:'Targeting',
+   q:'Have you identified specific priority targets for this work?',
+   hint:'This means you\'ve done the analysis — you know which legislators or races matter, and why. A general sense of "important districts" doesn\'t count.',
+   opts:[
+    {v:'yes',     t:'Yes — I have a clear, prioritized list with a rationale for each'},
+    {v:'partial', t:'Somewhat — rough sense but not formally prioritized', s:'Some targets feel obvious but I haven\'t done the full analysis'},
+    {v:'no',      t:'Not yet — I haven\'t done targeting work'},
+   ],
+   showIf:a=>['influence','find_pos'].includes(a.goal)},
+
+  {id:'composition',lbl:'Target composition',
+   q:'Do all of the races or seats you\'re targeting have an incumbent legislator?',
+   hint:'An incumbent legislator is someone currently serving who is running for re-election in that seat. Races or seats without an incumbent — open seats, seats where the incumbent isn\'t on your list, or challengers running against a non-target — choose the second option.',
+   opts:[
+    {v:'all_legs',    t:'Yes — every seat on my list has an incumbent legislator as a target'},
+    {v:'has_non_inc', t:'No — some or all seats have no incumbent legislator on my list', s:'Includes open seats, challengers, and any race where the current legislator isn\'t a target'},
+   ],
+   showIf:a=>a.goal==='influence' && a.targets==='yes'},
+
+  {id:'leg_seats',lbl:'Seat competitiveness',
+   q:'How would you describe the seats your target legislators are in?',
+   hint:'This shapes which tools are most effective and how your program reads from a compliance standpoint.',
+   opts:[
+    {v:'all_swing',   t:'All or most are competitive (swing) races'},
+    {v:'mixed_seats', t:'A mix — some competitive, some safe'},
+    {v:'all_safe',    t:'All or most are safe seats'},
+    {v:'unknown',     t:'Not sure — haven\'t analyzed competitiveness yet'},
+   ],
+   showIf:a=>a.goal==='influence' && a.targets==='yes' && a.composition==='all_legs'},
+
+  {id:'leg_pos_swing',lbl:'Target positions',
+   q:'How would you describe the positions of your target legislators on MAID?',
+   hint:'"On the fence" means they genuinely haven\'t committed — not just that you don\'t know their position. If you don\'t know positions, that\'s a separate problem to solve first.',
+   opts:[
+    {v:'all_fence',   t:'All or most are on the fence or noncommittal',        s:'The clearest case for an influence program'},
+    {v:'mix_w_fence', t:'A mix — some fence-sitters alongside supporters and/or opponents'},
+    {v:'all_support', t:'All or most support MAID'},
+    {v:'all_oppose',  t:'All or most oppose MAID'},
+    {v:'no_fence',    t:'A mix of supporters and opponents — no fence-sitters'},
+   ],
+   showIf:a=>a.goal==='influence' && a.targets==='yes' && a.composition==='all_legs' && a.leg_seats==='all_swing'},
+
+  {id:'leg_positions',lbl:'Target positions',
+   q:'How would you describe the positions of your target legislators on MAID?',
+   hint:'"On the fence" means they genuinely haven\'t committed — not just that you don\'t know their position. If you don\'t know positions, that\'s a separate problem to solve first.',
+   opts:[
+    {v:'all_fence',   t:'All or most are on the fence or noncommittal',        s:'The clearest case for an influence program'},
+    {v:'mix_w_fence', t:'A mix — some fence-sitters alongside supporters and/or opponents'},
+    {v:'all_support', t:'All or most support MAID'},
+    {v:'all_oppose',  t:'All or most oppose MAID'},
+    {v:'no_fence',    t:'A mix of supporters and opponents — no fence-sitters'},
+   ],
+   showIf:a=>a.goal==='influence' && a.targets==='yes' && a.composition==='all_legs' && ['all_safe','mixed_seats'].includes(a.leg_seats)},
+
+  {id:'cand_seats',lbl:'Race competitiveness',
+   q:'How would you describe the races your targets are in?',
+   hint:'Without the official capacity option available for non-serving candidates, competitive races are the primary context where ATC-style work is effective. How your list breaks across seat types also shapes how the program reads from a compliance standpoint.',
+   opts:[
+    {v:'all_swing',   t:'All or most are competitive (swing) races'},
+    {v:'mixed_seats', t:'A mix — some competitive, some safe or open'},
+    {v:'all_safe',    t:'All or most are safe seats or non-competitive'},
+   ],
+   showIf:a=>a.goal==='influence' && a.targets==='yes' && a.composition==='has_non_inc'},
+
+  {id:'cand_pos',lbl:'Target positions',
+   q:'How would you describe the positions of your target candidates on MAID?',
+   hint:'"On the fence" means they genuinely haven\'t committed. If you don\'t know positions, you can\'t run an influence program — find out first.',
+   opts:[
+    {v:'all_fence',   t:'All or most are on the fence or genuinely unknown',   s:'The clearest case for ATC'},
+    {v:'mix_w_fence', t:'A mix — some fence-sitters alongside supporters and/or opponents'},
+    {v:'all_support', t:'All or most support MAID'},
+    {v:'all_oppose',  t:'All or most oppose MAID'},
+    {v:'no_fence',    t:'A mix of supporters and opponents — no fence-sitters'},
+   ],
+   showIf:a=>a.goal==='influence' && a.targets==='yes' && a.composition==='has_non_inc' && ['all_swing','mixed_seats'].includes(a.cand_seats)},
+
+  {id:'stakes',lbl:'Legislative stakes',
+   q:'How significant are these races or seats to your MAID legislative strategy?',
+   hint:'Would the outcomes here meaningfully change what\'s possible in the next session — majority margins, committee composition, key relationships?',
+   opts:[
+    {v:'critical',    t:'Critical — could directly shift the legislative math on MAID'},
+    {v:'significant', t:'Significant — matters but isn\'t the only path'},
+    {v:'minor',       t:'I\'m not sure how these races connect to my legislative goals', s:'The link between these electoral targets and your legislative path isn\'t clear yet'},
+   ],
+   showIf:a=>{
+     if(a.goal!=='influence'||a.targets!=='yes') return false;
+     const legSwing = a.composition==='all_legs' && a.leg_seats==='all_swing' && ['all_fence','mix_w_fence'].includes(a.leg_pos_swing);
+     const legSafe  = a.composition==='all_legs' && ['all_safe','mixed_seats'].includes(a.leg_seats) && ['all_fence','mix_w_fence'].includes(a.leg_positions);
+     const cand     = a.composition==='has_non_inc' && ['all_swing','mixed_seats'].includes(a.cand_seats) && ['all_fence','mix_w_fence'].includes(a.cand_pos);
+     return legSwing||legSafe||cand;
+   }},
+
+  {id:'vols',lbl:'Volunteer capacity',
+   q:'What\'s your volunteer capacity in these target districts?',
+   hint:'ATC and constituent pressure live or die on volunteer execution. Past pilot programs have shown that even well-designed efforts produce very low volunteer completion rates without a solid base already in place. Be realistic.',
+   opts:[
+    {v:'strong',   t:'Strong — active, engaged volunteers in these districts already'},
+    {v:'moderate', t:'Moderate — some supporters, need activation and support'},
+    {v:'thin',     t:'Thin — little presence in these areas'},
+   ],
+   showIf:a=>{
+     if(a.goal!=='influence'||a.targets!=='yes') return false;
+     if(!['critical','significant'].includes(a.stakes)) return false;
+     const legSwing = a.composition==='all_legs' && a.leg_seats==='all_swing' && ['all_fence','mix_w_fence'].includes(a.leg_pos_swing);
+     const legSafe  = a.composition==='all_legs' && ['all_safe','mixed_seats'].includes(a.leg_seats) && ['all_fence','mix_w_fence'].includes(a.leg_positions);
+     const cand     = a.composition==='has_non_inc' && ['all_swing','mixed_seats'].includes(a.cand_seats) && ['all_fence','mix_w_fence'].includes(a.cand_pos);
+     return legSwing||legSafe||cand;
+   }},
+];
+
+function vq(){return Q.filter(q=>!q.showIf||q.showIf(S.a));}
+function pct(){
+  if(S.phase==='intro') return 0;
+  const v=vq(),idx=v.findIndex(q=>q.id===Q[S.step]?.id);
+  if(idx<0) return 100;
+  return Math.round(8+(idx/v.length)*84);
+}
+function setPf(){document.getElementById('pf').style.width=pct()+'%';}
+function tc(t,b,p){return '<div class="tc'+(p?' pri':'')+'"><div class="tct">'+t+'</div><div class="tcb">'+b+'</div></div>';}
+function si(n,t){return '<div class="si"><div class="sn">'+n+'</div><div class="st">'+t+'</div></div>';}
+function sumHtml(){
+  const v=vq();
+  const rows=v.map(q=>{const o=q.opts.find(x=>x.v===S.a[q.id]);return o?'<div class="srow"><span class="slbl">'+q.lbl+'</span><span class="sval">'+o.t+'</span></div>':''}).join('');
+  return '<div class="sumbox"><div class="sumtitle">Your responses</div>'+rows+'</div>';
+}
+
+function renderIntro(){\n  S.phase='intro';setPf();\n  document.getElementById('res').style.display='none';\n  document.getElementById('scr').innerHTML=\n    '<div class="eyebrow">Electoral &amp; Legislative Activity Planner</div>'+\n    '<div class="big-title">What\'s the play?</div>'+\n    '<div class="body-text">'+\n      '<p>Connecting electoral activity to legislative strategy is genuinely complicated. There are a lot of tools available — ATC, candidate questionnaires, pledges, scorecards, constituent pressure — and the difference between using them well and using them poorly often comes down to whether the activity is clearly connected to a specific legislative goal, aimed at the right targets, and matched to the capacity you actually have.</p>'+\n      '<p>This tool exists to help make that connection explicit. It walks you through the key questions — what are you trying to accomplish, who are your targets, what do you know about them, what capacity do you have — and points you toward the activity most likely to actually move the needle, along with specific guidance on next steps. It isn\'t a substitute for strategic judgment, but it can help surface the right questions before you commit capacity to a program.</p>'+\n      '<p><strong>The best time to use this is before session ends</strong> — ideally while you\'re still in the middle of your legislative campaign and can build electoral activity into the plan rather than bolting it on afterward. If session is already over or elections are close, it\'s still useful, but the earlier the better.</p>'+\n      '<p>The activities here aren\'t separate from your legislative campaign. They\'re extensions of it — ways to use the electoral calendar to build pressure, lock in commitments, and shape the landscape before the next session starts. If you\'re not sure where to start, or the tool raises questions you don\'t know how to answer, Patrick is available to work through it with you. You don\'t need to have everything figured out before reaching out.</p>'+\n    '</div>'+\n    '<div class="divider"></div>'+\n    '<div class="sec-lbl">Tools covered in this planner</div>'+\n    '<div class="pills">'+\n      '<span class="pill">Ask the Candidate</span>'+\n      '<span class="pill">Constituent pressure on legislators</span>'+\n      '<span class="pill">Candidate questionnaire</span>'+\n      '<span class="pill">Candidate pledge</span>'+\n      '<span class="pill">Candidate scorecard</span>'+\n      '<span class="pill">Legislative scorecard</span>'+\n      '<span class="pill gray">Partisan electoral engagement ↗</span>'+\n    '</div>'+\n    '<div class="intro-note">The grayed item — partisan electoral engagement — is a different legal and organizational bucket. This tool will point you toward it when it\'s the right answer and explain the distinction, but it won\'t walk you through it. That conversation happens with Patrick.</div>'+\n    '<button class="btn pri" onclick="startQ()">Get started</button>';\n}
+
+function startQ(){S.phase='q';S.step=0;renderQ();}
+function renderQ(){
+  const v=vq(),vi=v.findIndex(q=>q.id===Q[S.step]?.id);
+  if(vi<0||S.step>=Q.length){buildResult();return;}
+  const q=v[vi];setPf();
+  document.getElementById('scr').innerHTML=
+    '<div class="qlbl">Question '+(vi+1)+' of '+v.length+'</div>'+
+    '<div class="qtext">'+q.q+'</div>'+
+    '<div class="hint">'+q.hint+'</div>'+
+    '<div class="opts" id="opts"></div>'+
+    '<div class="nav">'+
+      '<button class="btn" onclick="goBack()" '+(vi===0?'style="visibility:hidden"':'')+'>Back</button>'+
+      '<button class="btn pri" id="nb" onclick="goNext()" '+(S.a[q.id]?'':'disabled')+'>Continue</button>'+
+    '</div>';
+  const el=document.getElementById('opts');
+  q.opts.forEach(o=>{
+    const b=document.createElement('button');
+    b.className='opt'+(S.a[q.id]===o.v?' sel':'');
+    b.innerHTML='<span class="ring"><span class="dot"></span></span><span class="ot">'+o.t+(o.s?'<span class="os">'+o.s+'</span>':'')+'</span>';
+    b.onclick=()=>{S.a[q.id]=o.v;document.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');const nb=document.getElementById('nb');if(nb)nb.disabled=false;};
+    el.appendChild(b);
+  });
+}
+function goNext(){const v=vq(),vi=v.findIndex(q=>q.id===Q[S.step]?.id);if(vi<v.length-1){S.step=Q.findIndex(q=>q.id===v[vi+1].id);renderQ();}else buildResult();}
+function goBack(){const v=vq(),vi=v.findIndex(q=>q.id===Q[S.step]?.id);if(vi>0){S.step=Q.findIndex(q=>q.id===v[vi-1].id);renderQ();}}
+function restart(){S.step=0;S.a={};document.getElementById('res').style.display='none';renderIntro();}
+
+function posFor(a){
+  if(a.composition==='all_legs') return a.leg_seats==='all_swing' ? a.leg_pos_swing : a.leg_positions;
+  return a.cand_pos;
+}
+
+
+function posFor(a){
+  if(a.composition==='all_legs') return a.leg_seats==='all_swing' ? a.leg_pos_swing : a.leg_positions;
+  return a.cand_pos;
+}
+
+// ─── reusable snippets ───────────────────────────────────────
+const OFFICIAL_CAP_DEF='<p><strong>A note on official capacity:</strong> "Official capacity" means targeting a legislator in their role as a legislator — not as a candidate. They may also be a candidate, but at official-capacity events they are wearing their legislator hat. A practical test: if an event has no "paid for by" disclaimer, it is likely an official event and qualifies. If it does carry that disclaimer, it is a political event and does not qualify for official capacity work.</p>';
+
+const QUESTIONNAIRE_NOTE='<p><strong>On questionnaires:</strong> Decide in advance whether you want candidate responses to be public or private among staff only. A private questionnaire is likely to get more transparent responses; a public questionnaire provides a later opportunity for public accountability. Note that direct phone contact is usually faster than sending a questionnaire even with a long target list — the two approaches serve different purposes and can be combined, but a phone call gets more candid information while a questionnaire creates a formal paper trail.</p>';
+
+const PNOTE='<div class="pnote"><strong>A note on partisan electoral work.</strong> Endorsements, independent expenditures, and direct candidate support are part of the broader toolbox — but they live in a separate legal and organizational bucket from everything covered here. Electoral engagement capacity and what\'s permissible varies significantly by state — if your analysis points toward that kind of engagement, the conversation with Patrick will include understanding what\'s actually available in your state before any program design happens. It\'s not off the table; it just requires its own process.</div>';
+
+// ─── shared result builders ──────────────────────────────────
+function rTargetingFirst(a,body2){
+  return {
+    badge:'Targeting first',bs:'background:#FAEEDA;color:#412402',ic:'amb',
+    title:'Name your targets before you name your tactics.',
+    intro:'The program design can\'t happen before the targeting analysis — and a list of 15 priorities is the same as no priorities at all.',
+    body:'<p>Without a clear, manageable target list you end up at one of two bad places: a scattered effort that spreads capacity too thin, or a program so broad it can\'t be executed meaningfully. The specificity of the targeting rationale is a critical part of what makes a program successful — strategically and from a compliance standpoint. Breadth and depth of targeting have to sync up with the actual capacity you have to execute.</p><p>For each name or race on your list, you should be able to answer all of the following: What is the specific legislative barrier this person represents — are they a committee chair blocking a hearing, a swing vote on the floor, a member of a key caucus? Are they in the House or Senate, and does that matter for your current path? What did they do or not do last session that makes them a target now? Are they in a competitive race? Do we have any volunteer presence in their district? If you can\'t answer those questions for a target, they probably shouldn\'t be on the list yet.</p>'+(body2||'')+'<p>Not every target needs the same depth of program. Think in tiers. Tier 1 targets — your highest-priority, most impactful, most feasible — warrant a full-depth program like ATC or official capacity work. Tier 2 targets might get something lighter: a digital-first approach, a candidate pledge ask, or a questionnaire. Tier 3 might just be a statewide broadcast email that keeps the issue visible with minimal operational cost. The tiering should be explicit, with a clear rationale for why each target belongs where they do and why the specific activity fits the specific situation.</p>',
+    tactics:'',
+    steps:[
+      'Start with your existing legislative campaign target list and layer in political information: is each legislator up for re-election this cycle? Has any opponent filed for that race? How competitive is the district based on recent results? This takes less than an hour of research on Ballotpedia.com and can eliminate many targets right away.',
+      'Schedule a session debrief with your lobbyist — ask specifically: who moved, who blocked, who was genuinely persuadable, and what would change their calculus? This conversation will tell you more than any formal analysis.',
+      'Draft a target list of no more than 5–7 names or races, with a one-sentence rationale for each: what is their specific role in blocking or advancing MAID, and why are they movable?',
+      'For each target, note: House or Senate? Committee role? Competitive seat or safe? Any existing relationship with staff or lobbyist? Did they take a specific action on MAID last session you can point to?',
+      'Assign each target to a tier based on legislative significance and your capacity to engage: Tier 1 (full-depth program), Tier 2 (lighter digital or pledge approach), Tier 3 (broadcast or passive visibility). The tier assignment should be explicit and justifiable.',
+      'Cut any target where you can\'t articulate a clear theory for how pressure from constituents changes their position or behavior — if you can\'t name the mechanism, they\'re not a real target yet.',
+      'Bring the tiered list and rationales to Patrick before designing any program.'
+    ],
+    cos:[],
+    gaps:[
+      'I have not yet built a prioritized target list with a clear rationale for each name.',
+      'I need to complete a session debrief with my lobbyist to identify who is genuinely movable.',
+      'I need to assess seat competitiveness for each potential target and assign them to tiers.',
+      'I have not yet articulated the specific legislative barrier my program would be trying to move.'
+    ]
+  };
+}
+
+function rCapacityGap(){
+  return {
+    badge:'Capacity gap',bs:'background:#FAEEDA;color:#412402',ic:'amb',
+    title:'The conditions are right. The volunteer capacity isn\'t — yet.',
+    intro:'A weak program can be worse than no program. It burns staff time and volunteer trust without results.',
+    body:'<p>Past pilot programs have shown that even well-designed efforts produce very low volunteer completion rates when the infrastructure to execute them isn\'t already in place. Constituent pressure and ATC work when volunteers are already engaged and looking for ways to contribute. They don\'t work as volunteer acquisition mechanisms. The investment right now is building your base in these districts so the capacity exists when the next opening comes.</p><p>That said, there are lower-capacity options that can keep the issue visible and lay groundwork for future cycles without requiring a mobilized volunteer base. ATC is one tool in the toolkit — it\'s the highest-investment option for highest-priority targets. When volunteer capacity is thin, the right move is to match the activity to the capacity you actually have, not the capacity you wish you had.</p>',
+    tactics:'<div class="sec-lbl" style="margin-top:1.25rem">Lower-capacity alternatives for this cycle</div><div class="tcards">'+tc('Statewide broadcast email','A single email to all supporters asking them to reach out to their own candidates or legislators. No district-level targeting, no volunteer coordination, no reporting infrastructure required. You won\'t get much actionable intelligence back, but it keeps the issue visible at near-zero operational cost.',true)+tc('Candidate questionnaire via staff','Direct written outreach from staff to campaigns asking for their position on MAID. No volunteers required — establishes a paper trail and starts a relationship without needing constituent infrastructure. Decide in advance whether responses will be public or private. Work with Patrick to develop the questionnaire language and distribution list.')+tc('Lobbyist-level outreach','For your highest-priority targets, direct staff or lobbyist contact is more efficient than any volunteer program when the volunteer base is thin. It also starts the relationship that matters most if they win or stay in office.')+tc('Candidate and legislator education','A lower-capacity but often underused option. At one end: a staffer sitting down with a candidate for an hour to walk through questions and the details of the policy. At the other: developing a one-pager on the politics of MAID — including recent statewide polling — that can be sent broadly to multiple candidates or shared at events. A digestible policy explainer can open doors that constituent pressure alone can\'t.')+'</div>',
+    steps:[
+      'Pull your supporter list for each target district from EveryAction — look for anyone who has taken action in the last 12 months; these are your warmest potential volunteers. Reach out to Patrick or the database team if you need help with this.',
+      'Identify 1–2 people in each district who could serve as a local point of contact — an action team leader, a past event attendee, someone who has called their legislator before.',
+      'Reach out personally (not by broadcast email) to those individuals to gauge interest in more active involvement — this is the organizing work that builds the base.',
+      'For this cycle, choose one lower-capacity alternative from the options above that fits what you can actually execute well — doing one thing well is better than three things poorly.',
+      'Flag these districts explicitly in your campaign plan as capacity-building priorities for the next cycle.'
+    ],
+    cos:[],
+    gaps:[
+      'I have identified good target races but do not yet have a volunteer base in those districts.',
+      'I need help identifying which lower-capacity alternative (broadcast email, questionnaire, lobbyist outreach, candidate education) is the best fit for this cycle.',
+      'I need a supporter acquisition strategy for the priority regions so I can build capacity before the next cycle.'
+    ]
+  };
+}
+
+function rLowPriority(){
+  return {
+    badge:'Connection unclear',bs:'background:#FAEEDA;color:#412402',ic:'amb',
+    title:'Before designing a program, map how these races connect to your legislative path.',
+    intro:'The link between electoral targets and legislative goals isn\'t always obvious — but it needs to be explicit before you can design a program worth running.',
+    body:'<p>Electoral engagement makes the most sense when you can clearly articulate how the outcome of a race — or the pressure created by activity in a race — advances your legislative goal. That connection can be direct or indirect.</p><p><strong>Direct connection:</strong> The person in this race IS your legislative target. They\'re a current legislator running for re-election, they sit on a key committee, they\'re a swing vote you need. Winning or losing this race, or changing their position in this race, directly changes what\'s possible on MAID in the next session.</p><p><strong>Indirect connection:</strong> The person in this race isn\'t your primary target, but their race affects someone who is. A competitive primary in a neighboring district puts pressure on your fence-sitting legislator. A shift in the majority changes committee composition. A new member in a key seat changes the relationship dynamics around your bill. These indirect connections are real and worth pursuing — but they require more explicit articulation to be defensible.</p><p>If you can\'t clearly describe which type of connection applies to each race on your list, that\'s the work to do before coming back to this tool.</p>',
+    tactics:'',
+    steps:[
+      'For each race on your list, write one sentence that completes this prompt: "Activity in this race advances our MAID legislative goal because ___." If you can\'t complete the sentence, that race isn\'t ready to be a target yet.',
+      'Think through indirect connections: does this race affect majority math in the chamber where your bill is stuck? Does it affect a key committee? Does it put pressure on a legislator who is already on your target list?',
+      'Talk to your lobbyist about which races they\'re watching and why — they often have a clearer picture of how electoral outcomes affect legislative dynamics than field staff do.',
+      'Once you can articulate the connection for each race, return to this tool — you\'ll likely find the stakes question answers itself once the rationale is written down.',
+      'Bring your completed rationale document to Patrick — the electoral-to-legislative connection is exactly what the conversation about program design should start from.'
+    ],
+    cos:[],
+    gaps:[
+      'I have not yet mapped the direct or indirect connection between each race on my list and our specific legislative barrier on MAID.',
+      'I need help thinking through whether any of these races connect indirectly to our legislative targets (majority math, committee composition, pressure on a fence-sitter).',
+      'I need to talk to my lobbyist about which races they are watching and why before I can complete this analysis.'
+    ]
+  };
+}
+
+function buildResult(){
+  const a=S.a;
+  let r={badge:'',bs:'',title:'',intro:'',ic:'',body:'',tactics:'',steps:[],cos:[]};
+
+  // ══ ENGAGE VOLUNTEERS ══
+  if(a.goal==='engage_vol'){
+    r.badge='Reframe first';r.bs='background:#FAEEDA;color:#412402';r.ic='amb';
+    r.title='Volunteer engagement is a means, not an end.';
+    r.intro='Before you pick an activity, name what you actually want volunteers to help accomplish.';
+    r.body='<p>This is one of the most common planning mistakes in between-session work: "engage volunteers" becomes the goal, and the activity gets designed around filling that need. Volunteers aren\'t served by being mobilized for its own sake — they\'re served by being given meaningful work that connects to something real.</p><p>The test is simple: if a volunteer asks "why am I doing this and what happens with what I find out?", you should have a clear, specific answer. If you don\'t, the activity isn\'t ready to be run. The goal needs to come before the activity, not the other way around.</p>';
+    r.steps=[
+      'Write one sentence that completes this prompt: "I want volunteers to do [specific activity] so that [specific outcome] happens, which advances our goal of [legislative or electoral objective]." If you can\'t complete it, the goal isn\'t clear enough yet.',
+      'Check whether that goal already has a home in your existing campaign plan — volunteer activity should be a component of something already in motion, not a standalone program.',
+      'If the goal is legislative (move a legislator\'s position, hold them accountable for a vote), return to this tool and select the "Influence legislators and/or candidates" path.',
+      'If the goal is electoral (reach candidates, gather position intelligence), return to this tool and select the appropriate path for what you\'re actually trying to accomplish.',
+      'Bring the completed one-sentence goal statement to Patrick — that framing is the starting point for designing what volunteer activity actually looks like.'
+    ];
+    r.cos.push({t:'amb',m:'If the districts where you want to engage volunteers don\'t meet the criteria for ATC or another specific program, that activity won\'t produce results. There are many ways to put volunteers to work — legislative accountability, candidate outreach, community education. The activity follows the goal, not the other way around.'});
+
+  // ══ FIND POSITION ══
+  } else if(a.goal==='find_pos'){
+    r.badge='Direct outreach';r.bs='background:#E1F5EE;color:#0F6E56';
+    r.title='The fastest way to find out where someone stands is to ask them directly.';
+    r.intro='Staff outreach — not ATC — is the right tool when position intelligence is the goal.';
+    r.body='<p>One of the most common misuses of tactics like ATC, candidate pledges, and questionnaires is using them as a substitute for simply asking someone their position directly. These tools are designed to <em>influence</em> positions, apply public pressure, or create accountability — not primarily to discover where someone stands. Using a public pledge to find out a candidate\'s position, for example, inverts the logic: you need to know the position before you can decide whether a pledge is even the right next step.</p><p>Direct staff or lobbyist outreach is almost always faster, more candid, and more strategically useful than any of those tools for pure intelligence-gathering. A phone call or email gets you a real answer, starts a relationship, and lets you ask follow-up questions in real time. A public questionnaire, by contrast, alerts the candidate that you\'re tracking them, limits what they\'ll say, and creates a paper trail before you know what you\'re dealing with.</p><p>The right sequence is: find out privately first, then decide what — if anything — to do with what you learn. Once you know a position, you can make an informed choice about whether to use a public questionnaire for accountability, whether ATC makes sense, whether to pursue a pledge, or whether the situation calls for something else entirely. You can\'t make those decisions well without the intelligence.</p>';
+    if(a.targets==='no'||a.targets==='partial') r.body+='<p>Before starting outreach, build a prioritized target list. Not every position matters equally to your legislative strategy — do the targeting analysis first, then reach out only to people on that list.</p>';
+    r.body+=QUESTIONNAIRE_NOTE;
+    r.tactics='<div class="sec-lbl" style="margin-top:1.25rem">Tools for this goal</div><div class="tcards">'+tc('Direct staff or lobbyist outreach','Call or email the campaign directly — ask to speak with the candidate or their policy staff. Introduce yourself, explain you\'re with Compassion & Choices Action Network, and ask where the candidate stands on medical aid in dying. Log the response immediately. Even a "no comment" is intelligence. This is the right first step in almost every case.',true)+tc('Candidate questionnaire','A formal written questionnaire asking for a candidate\'s position on MAID. Use this once you have done initial outreach and need a formal record — not as a substitute for the initial conversation. Decide in advance whether responses will be public or private. Work with Patrick to develop the language.')+'</div>';
+    r.steps=[
+      'Build a prioritized outreach list — limit it to candidates and legislators where the position is genuinely unclear AND the seat matters to your legislative path. You probably already know where most incumbents stand.',
+      'For each target, find the campaign contact: check the campaign website, search your state\'s campaign finance database for the treasurer\'s contact, or ask your lobbyist if they have a direct line.',
+      'Make initial contact by phone if possible — a call from a staff member or lobbyist gets a more candid response than an email and starts a relationship. Follow up in writing to create a record.',
+      'Log every response (including non-responses) in a shared document: candidate name, race, date of outreach, response, and any follow-up needed.',
+      'Once you have positions, use the intelligence to decide what to do next — this is where the work actually starts.',
+      'Supporters → pursue a pledge to lock in their position publicly and incorporate into your ongoing legislative campaign plan.',
+      'Fence-sitters or unknowns → return to this tool and run the Influence path; those are your ATC and constituent pressure targets.',
+      'Opponents → assess whether long-game pressure over time is worth the capacity, and whether electoral engagement is a separate conversation worth having with Patrick.',
+      'No response after two attempts → flag for follow-up and treat as unknown for now.'
+    ];
+    r.cos.push({t:'grn',m:'<strong>A note on the sequence:</strong> Find out privately first, then decide what to do with what you learn. Knowing a position is the prerequisite to every other tactic. A public questionnaire, a pledge ask, ATC — all of these make more sense, and work better, once you already know what you are working with.'});
+    r.gaps=['I have not yet built a prioritized outreach list — I need help identifying which candidates and legislators most matter to our legislative path.','I need help developing questionnaire language and deciding whether responses should be public or private.','Once I have position intelligence, I will need help deciding what program or activity is the right next step.'];
+    r.cos.push({t:'amb',m:'<strong>A common misuse to avoid:</strong> questionnaires and pledges are accountability tools, not intelligence-gathering tools. If the goal is to find out where someone stands, a direct conversation gets you better information faster. Reserve the public questionnaire or pledge for after you know the position — as a deliberate choice about creating accountability, not as a substitute for asking directly.'});
+  // ══ SUPPORT CANDIDATE ══
+  } else if(a.goal==='support'){
+    r.badge='Partisan electoral engagement';r.bs='background:#E6F1FB;color:#0C447C';
+    r.title='Starting from a desire to elect someone makes this partisan — and that\'s a different conversation.';
+    r.intro='If your goal is to affect who wins a race, the tools you use take on a different legal and organizational character regardless of what those tools look like on paper.';
+    r.body='<p>A constituent pressure campaign, a candidate pledge drive, a scorecard — any of these can be legitimate issue-focused activity when the goal is to move positions or educate the public. But when the starting point is "I want this person to win," the intent shapes the program. Partisan electoral engagement is a real and valid thing for CCAN to do — it just requires its own process, its own compliance framework, and its own program design.</p><p>This tool doesn\'t walk you through that process, in part because partisan electoral planning needs to remain separate from nonpartisan plans. That planning conversation starts with Patrick. Bring him the strategic case: which race, why it matters to your legislative path, what you\'re hoping to accomplish, and what capacity you have. He can help you figure out whether and how to engage — and he\'s willing to do real work alongside you on the plan, not just point you in a direction.</p>';
+    r.steps=[
+      'Build the strategic case: which race, why it matters legislatively, what you want to accomplish, and what your read is on the candidate and their opponent.',
+      'Bring that case to Patrick before designing any program or taking any public-facing action.',
+      'Let that conversation determine what engagement looks like and what process it requires.'
+    ];
+    r.cos.push({t:'blu',m:'Important: there are real limitations to how and whether CCAN can engage electorally, and these vary significantly by state. The conversation with Patrick will include understanding what\'s actually permissible in your state before any program design happens.'});
+    r.gaps=['I want to explore partisan electoral engagement in support of a pro-MAID candidate — I need to understand what is permissible in my state and what the process looks like.','I need help building the strategic case: which race, why it matters to our legislative path, and what engagement options are available.'];
+
+  // ══ INFLUENCE ══
+  } else if(a.goal==='influence'){
+
+    if(a.targets==='no'||a.targets==='partial'){
+      const extra=a.targets==='partial'?'<p>You have a rough sense of who matters, which is a start. But "feels important" isn\'t a targeting rationale. The questions above are important for developing an impactful and strategic plan and program.</p>':'';
+      r=rTargetingFirst(a,extra);
+
+    } else if(a.composition==='all_legs'){
+      const seats=a.leg_seats;
+      const pos=seats==='all_swing' ? a.leg_pos_swing : a.leg_positions;
+
+      if(seats==='unknown'){
+        r.badge='Research needed';r.bs='background:#FAEEDA;color:#412402';r.ic='amb';
+        r.title='Find out how competitive these seats are before choosing a path.';
+        r.intro='Seat competitiveness determines which tools are available and how your program reads — and it\'s worth getting right before you design anything.';
+        r.body='<p>Legislators in competitive races are actively campaigning, more accessible to constituents, and more responsive to pressure — every voter matters to them. Legislators in safe seats don\'t face that dynamic. These two situations call for very different program designs: competitive seats open up electoral-path tools like ATC, while safe seats point toward official capacity work. You need to know which situation you\'re in for each target before building anything.</p><p>A race is generally considered competitive if the margin in the last election was within roughly 10 percentage points, or if independent analysts rate it as a toss-up or lean. A safe seat is one where the incumbent won by 20 or more points, the district has a strong partisan lean, or no serious challenger has emerged.</p>';
+        r.steps=[
+          'Go to Ballotpedia.com and search for "[your state] state legislature elections [current year]" — this will show you a list of all races with ratings and past results.',
+          'For each target district, look up the most recent election result — note the margin of victory; anything under 10 points warrants a closer look, anything over 20 is likely a safe seat.',
+          'Look back at least two cycles if you can — a single close race might be an anomaly; a pattern of close races indicates a genuinely competitive district.',
+          'Be cautious about results from 2020 and earlier: all legislative districts were redrawn following the 2020 Census, so pre-redistricting results may not reflect the current district\'s composition.',
+          'If past election results are inconsistent or unclear, check party registration data for each district through your state\'s secretary of state or elections website — a district where one party has a 15+ point registration advantage is likely a safe seat regardless of recent margins.',
+          'Note any independent race ratings from Cook Political Report, Sabato\'s Crystal Ball, local media, or your state\'s equivalent if available — these factor in candidate quality and fundraising, not just historical margins. Note that these tools are often unavailable for legislative or other down-ballot races but are helpful for gubernatorial races.',
+          'Categorize each target as competitive, likely safe, or safe — then return to this tool with that information; the recommended approach differs substantially for each.'
+        ];
+        r.gaps=['I have not yet researched the competitiveness of my target districts — I need to do this before I can choose a program path.','Once I have competitiveness data, I may need help deciding whether official capacity work, an electoral program, or a combination is the right approach.'];
+
+      } else if(pos==='all_fence'||pos==='mix_w_fence'){
+        if(a.stakes==='minor'){ r=rLowPriority(); }
+        else if(a.vols==='thin'){ r=rCapacityGap(); }
+        else {
+          if(seats==='all_safe'){
+            r.badge='Official capacity program';r.bs='background:#E1F5EE;color:#0F6E56';
+            r.title='Safe seats call for official capacity work — and you\'re ready to build the program.';
+            r.intro='This is a continuation of the work you\'re already doing during session. The skills, the relationships, and the volunteer ask are all things you\'ve done before.';
+            r.body=OFFICIAL_CAP_DEF+'<p>Legislators in safe seats aren\'t grinding on doors or dialing for dollars — they don\'t have to. But they still hold town halls, show up at community events, and host constituent coffees in their official capacity. That\'s your opening. A volunteer standing up at a town hall and asking "why did you oppose MAID this session?" or "we\'ve been waiting three years for a floor vote — what\'s your plan?" is accountability work that lives squarely in your legislative campaign, not a separate electoral program.</p><p>The key to making this effective is specificity. A vague question about "supporting end-of-life options" gives a legislator room to dodge. A question tied to a specific action — a vote, a committee decision, a public statement — requires a real answer. The sharper the question, the more valuable the constituent contact.</p><p>One important distinction: "Do you support MAID?" is primarily an information-gathering question that gives the legislator room to answer vaguely or deflect. "Why did you [specific action] on MAID this session?" is an accountability question that requires a real answer. "Will you support MAID if re-elected?" puts them on record for the future. In most cases, the second and third types are the more powerful asks — and which is most appropriate depends on whether the legislator took a clear action last session you can point to.</p><p>Before you meet with Patrick to build the plan, work through the questions below. The more specific your answers, the more productive that conversation will be. Patrick is a resource and a partner in this — he\'s willing to do real work alongside you, not just point you in a direction.</p>';
+            if(pos==='mix_w_fence') r.cos.push({t:'grn',m:'With a mix of positions in your list, focus the constituent pressure on fence-sitters. For supporters, a thank-you at a public event reinforces the relationship and signals that their support is noticed. For opponents, the accountability question is the tool. Make sure your volunteers know which they\'re doing and why.'});
+            r.tactics='<div class="sec-lbl" style="margin-top:1.25rem">Tools for this program</div><div class="tcards">'+tc('Constituent pressure on official-capacity events','Volunteers attending town halls, coffees, and community appearances to ask pointed questions about the legislator\'s record on MAID. Works best when the question is tied to a specific action and the volunteer is from the legislator\'s district. Coordinate with Patrick on compliance before launching.',true)+tc('Legislative scorecard','A public grading of legislators on MAID-related criteria — votes, co-sponsorships, committee actions — creates sustained accountability pressure that doesn\'t depend on any single event. Also gives volunteers something concrete to reference when they show up.')+'</div>'+
+            '<div class="sec-lbl" style="margin-top:1.25rem">Questions to answer before meeting with Patrick</div><div class="tcards">'+
+            tc('What is our specific legislative barrier?','Not just "we need more votes" — is the issue a committee chair blocking a hearing? A caucus leadership problem? A specific member whose vote would change the math? Understanding the specific barrier tells you what moving a particular target actually accomplishes.')+
+            tc('What did each target do or not do last session?','A specific, pointable action — a vote, a committee decision, a public statement, a missed meeting — is what makes the constituent question sharp. Note: a legislator who took a clear vote is a very different target from one where the bill never came to a vote. The former allows an accountability question; the latter requires a different framing.')+
+            tc('Who are the volunteers in each district?','Name them specifically. Not "we have supporters there" but actual people who have taken action before, attended events, or expressed interest in doing more. A program without named volunteers isn\'t a program yet.')+
+            tc('What does success look like for each target?','Not "they support MAID" — what specific behavior change would indicate movement? A public statement? A meeting with staff? A pledge? Agreeing to co-sponsor next session? Define it before you launch so you know what you\'re measuring.')+'</div>';
+            r.steps=[
+              'For each target legislator, look up their official public schedule — many legislators post town hall and community event calendars on their official websites or social media; your lobbyist may also know their schedules.',
+              'Write one specific question for each target based on their session record — "why did you [specific action]?" or "will you support MAID if re-elected?" — the right framing depends on whether they took a clear action you can point to.',
+              'Identify by name the volunteer(s) in each district who will show up — a program with no named volunteers isn\'t ready to launch.',
+              'Brief volunteers specifically: explain the difference between information-gathering ("do you support MAID?") and accountability or influence framing ("why did you vote against it?" or "will you support it if re-elected?"), and make clear which type of question they\'re asking and why.',
+              'Think through whether and how you need volunteers to report back. Ask yourself: what specific information do I need, and is it worth the additional ask? If reporting is important, keep it as simple as possible — a quick call or text to a staffer is often more effective than a formal form.',
+              'Coordinate with Patrick on compliance before any public-facing activity launches.',
+              'Schedule a planning meeting with Patrick — bring your target list with rationales, your draft questions, your named volunteers, and your read on what the specific legislative barrier is that this program is trying to move.'
+            ];
+            r.gaps=[
+              'Specific legislative barrier: what exactly is blocking MAID in your chamber?',
+              'Session record for each target: what specific action (vote, committee decision, statement) does each constituent question address?',
+              'Named volunteers: who specifically in each district is willing to show up at a public event?',
+              'Success definition: what specific behavior change would indicate movement for each target?',
+              'Compliance picture: what does the compliance review look like for official capacity work in my state?'
+            ];
+
+          } else if(seats==='mixed_seats'){
+            r.badge='Mixed-seat program';r.bs='background:#E1F5EE;color:#0F6E56';
+            r.title='A mix of competitive and safe seats: you\'re ready to plan, but you\'re planning two programs, not one.';
+            r.intro='The mix of seat types strengthens the program\'s defensibility — and means each group of targets needs its own design.';
+            r.body='<p>A program that touches both safe and competitive seats is clearly not purely electoral — the distribution itself is part of what makes it defensible as issue-influence work. But safe-seat targets and competitive-seat targets call for different tools and different processes, so you\'ll need to plan each component individually before bringing it together.</p>'+OFFICIAL_CAP_DEF+'<p>For safe-seat targets: official capacity work — volunteers at town halls, coffees, and community events asking pointed questions tied to the legislator\'s session record. For competitive-seat targets: a separate decision point. You can run official capacity work there too, or you can run an electoral program (ATC, pledge, questionnaire) — but not both for the same targets or races, and the electoral path requires its own compliance process.</p><p>ATC and official capacity work are one set of tactics among several. There are other approaches — digital-based outreach, candidate questionnaires, pledge programs, candidate and legislator education — that may accomplish similar goals with less capacity or may be better suited to specific targets on your list. Think about your target list in tiers: your highest-priority targets may warrant full-depth ATC or official capacity work, while others may be well-served by lighter approaches. The goal is matching the depth of the program to the priority of the target.</p><p>One important distinction on how volunteers should frame their ask: "Do you support MAID?" is primarily information-gathering. "Why did you [specific action] on MAID this session?" or "Will you support MAID if re-elected?" are influence-oriented questions that require real answers. The right framing depends on whether the target took a clear action last session — if they did, the accountability question is more powerful. If they didn\'t, the forward-looking "will you" framing is more appropriate.</p>';
+            r.cos.push({t:'grn',m:'The distribution of your target list across seat types is part of what makes this program defensible. Don\'t let it drift toward competitive-only as you execute — that changes how the program reads.'});
+            if(pos==='mix_w_fence') r.cos.push({t:'amb',m:'With a mix of positions, focus the active influence work on fence-sitters. The program\'s legitimacy comes from being genuinely aimed at people who can be moved.'});
+            r.tactics='<div class="sec-lbl" style="margin-top:1.25rem">Safe-seat component tools</div><div class="tcards">'+tc('Constituent pressure on official-capacity events','Volunteers at town halls, coffees, and community appearances asking pointed questions tied to the legislator\'s MAID record. Coordinate with Patrick on compliance.',true)+tc('Legislative scorecard','Creates sustained accountability pressure across your full target list — applies equally to safe and competitive seats.')+'</div>'+
+            '<div class="sec-lbl" style="margin-top:1rem">Competitive-seat component tools (choose one path per target)</div><div class="tcards">'+
+            tc('Path A — Official capacity (same as safe seats)','Run the same constituent pressure program for competitive-seat legislators as for safe-seat ones. Fewer compliance considerations, directly continuous with your legislative campaign work. Note that this path means it would not be possible to engage with the legislator\'s opponent in the race. If it is important to target both candidates in the race, Path B is probably a better fit.')+
+            tc('Path B — Electoral program (ATC / pledge / questionnaire)','Higher potential leverage in competitive races, but requires its own program design and compliance coordination with Patrick. Do not run alongside official capacity work for the same targets or races.')+'</div>'+
+            '<div class="sec-lbl" style="margin-top:1.25rem">Questions to answer before meeting with Patrick</div><div class="tcards">'+
+            tc('What is our specific legislative barrier?','Name it precisely — committee, caucus, vote count, leadership. This is what the whole program is in service of, and the answer should drive every targeting decision.')+
+            tc('For each safe-seat target: what specific action from last session does the constituent question address?','Try to tie every constituent question to something specific the legislator did or didn\'t do. A target who took a clear vote allows an accountability question; a target where the bill never came to a vote requires a different framing.')+
+            tc('For each competitive-seat target: Path A or Path B?','Make this decision before the planning meeting. The compliance picture and program design differ significantly — and you can\'t decide mid-program.')+
+            tc('Who are the named volunteers in each district?','Across both components, name them specifically. A program without named volunteers isn\'t ready to launch.')+'</div>';
+            r.steps=[
+              'Separate your target list into two groups: safe seats and competitive seats — plan each component individually.',
+              'For safe-seat targets: map their official-capacity calendars, write one specific question per target tied to their session record, and identify named volunteers in each district.',
+              'For competitive-seat targets: decide Path A or Path B for each one — if Path B, note that it requires a separate compliance process and program design.',
+              'For the competitive-seat Path B targets: confirm the race meets all ATC criteria (fence-sitters confirmed, legislatively significant, volunteer capacity exists) before committing to that path.',
+              'Think about your target list in tiers: which targets warrant the full depth of the program, and which might be better served by lighter alternatives? Make the tier assignment explicit.',
+              'Write the specific legislative barrier your program is trying to move — this should be the first thing you bring to the planning meeting with Patrick, because it\'s what justifies every targeting decision.',
+              'Schedule a planning meeting with Patrick — bring both components, the targeting rationales, the named volunteers, and the legislative barrier framing.'
+            ];
+            r.gaps=[
+              'Specific legislative barrier: what exactly is blocking MAID — committee, caucus, vote count, leadership?',
+              'For safe-seat targets: what specific action from last session does the constituent question address for each person?',
+              'For competitive-seat targets: Path A (official capacity) or Path B (electoral program) — I need help making this decision for each target.',
+              'Named volunteers: who specifically in each district is willing to show up or make contact?',
+              'Compliance picture: what does the compliance review look like for each component in my state?'
+            ];
+
+          } else {
+            // all_swing with fence-sitters
+            r.badge='Two distinct paths available';r.bs='background:#E1F5EE;color:#0F6E56';
+            r.title='Competitive seats with fence-sitters: you\'re ready to plan. But first, pick a path.';
+            r.intro='You have the right targets and the right conditions. The decision you need to make before anything else is which program you\'re running — because the design, the compliance process, and the Patrick conversation are different for each.';
+            r.body='<p>Both paths are legitimate. The choice between them depends on strategic judgment about where the leverage is, your volunteer capacity, and your compliance picture. Work through the comparison below, then bring your decision to Patrick — that conversation will determine the specifics of the plan. Patrick is a resource and a partner here — he\'s willing to do real work alongside you, not just point you in a direction.</p>'+OFFICIAL_CAP_DEF+'<p>One important distinction before you design either path: "Do you support MAID?" is primarily an information-gathering question that gives legislators room to dodge. "Why did you [specific action] on MAID this session?" is an accountability question that requires a real answer. "Will you support MAID if re-elected?" puts them on record. Whichever path you choose, the right framing depends on whether the target took a clear action last session — accountability framing is more powerful when they did, forward-looking "will you" framing is more appropriate when they didn\'t.</p>';
+            if(pos==='mix_w_fence') r.cos.push({t:'amb',m:'With a mix of positions in your list, focus the active influence work on fence-sitters regardless of which path you choose. The program\'s legitimacy comes from being genuinely aimed at people who can be moved — not at supporters or hardened opponents.'});
+            r.cos.push({t:'amb',m:'A program targeting only legislators in competitive races raises the compliance bar regardless of which path you take. That\'s not a stop — but it means the program needs to be designed intentionally with compliance factored in throughout. That conversation starts with Patrick.'});
+            r.tactics='<div class="sec-lbl" style="margin-top:1.25rem">Path A — official capacity</div><div class="tcards">'+
+            tc('What it is','Legislators will hold town halls, coffees, and community events in their official capacity as legislators, and we can ask volunteers to attend and ask pointed questions about the legislator\'s MAID record. A continuation of your legislative campaign work in official settings.',true)+
+            tc('Pros','Directly continuous with your existing campaign work. No separate electoral program design required. Lower compliance threshold than Path B. Can be launched faster.')+
+            tc('Cons','Less leverage than ATC in a competitive race — you\'re limited to whenever official events happen, and the legislator controls the setting. Harder to scale. Can only target the sitting legislator and would exclude any opponent(s).')+'</div>'+
+            '<div class="sec-lbl" style="margin-top:1rem">Path B — electoral program (ATC / pledge / questionnaire)</div><div class="tcards">'+
+            tc('What it is','Constituent volunteers contacting these legislators as candidates in their races — emails, calls, event attendance — to ask their position and apply sustained pressure on MAID.',true)+
+            tc('Pros','Higher potential leverage in a competitive race — every constituent contact matters to a candidate who needs every vote. Can be scaled more systematically than event-dependent official capacity work. Can target both the legislator and their opponent(s).')+
+            tc('Cons','Requires its own program design and compliance process. Cannot be run alongside Path A for the same targets. Raises the compliance bar — targeting only competitive races requires intentional design throughout.')+'</div>'+
+            '<div class="sec-lbl" style="margin-top:1.25rem">Questions to answer before meeting with Patrick</div><div class="tcards">'+
+            tc('What is our specific legislative barrier?','Name it precisely — committee, caucus, vote count, leadership. Understanding the barrier tells you what moving a specific legislator actually accomplishes, and helps determine which path has more leverage.')+
+            tc('Which path are you leaning toward, and why?','Come to the meeting with a recommendation, not just a question. Patrick can pressure-test your reasoning, but you should have a view going in.')+
+            tc('Who are the named volunteers in each district?','For Path A: people willing to show up at public events. For Path B: people willing to make calls, send emails, and follow up. Name them specifically.')+
+            tc('What does success look like for each target?','A public statement? A meeting with staff? A pledge to co-sponsor? Define it before you launch — you need to know what you\'re measuring.')+'</div>';
+            r.steps=[
+              'Make the Path A vs. Path B decision for each target or race before the planning meeting — you can choose different paths for different targets if seat dynamics warrant it, but each target needs a clear assignment.',
+              'For Path A targets: map their official-capacity calendars, write one specific question per target tied to their session record, and name the volunteer who will show up.',
+              'For Path B targets: confirm all ATC criteria are met (fence-sitter confirmed, legislatively significant, volunteer capacity exists) and note any position intelligence you already have.',
+              'Write the specific legislative barrier your program is trying to move — this is the first thing Patrick will ask, and it should justify every targeting decision.',
+              'Schedule a planning meeting with Patrick — bring your path decisions, targeting rationales, named volunteers, and the legislative barrier framing.',
+              'Do not launch any component before the compliance picture is clear — that conversation happens with Patrick.'
+            ];
+            r.cos.push({t:'grn',m:'A note on intent: the electoral path is a position-influence program. If the reason you\'re running Path B is to affect who wins a race — even as a secondary goal — that changes the legal character of the program. Intent matters. If electoral outcomes are part of the thinking, name that in the Patrick conversation before you build anything.'});
+            r.gaps=[
+              'Path decision: I am leaning toward [Path A / Path B] for the following reason — [needs to be filled in before our meeting].',
+              'Specific legislative barrier: what exactly is blocking MAID — committee, caucus, vote count, leadership?',
+              'Named volunteers: who specifically in each district is willing to show up (Path A) or make calls/emails (Path B)?',
+              'Success definition: what specific behavior change would indicate movement for each target?',
+              'Compliance picture: I need to understand the compliance requirements for my chosen path in my state.'
+            ];
+          }
+        }
+
+      } else if(pos==='all_support'){
+        r.badge='Wrong tool for this target list';r.bs='background:#FAEEDA;color:#412402';r.ic='amb';
+        r.title='All supporters — an influence program isn\'t the right fit.';
+        r.intro='There\'s no position to influence here. The work shifts to securing and reinforcing what you already have.';
+        r.body='<p>A formal constituent pressure program aimed at people who already support MAID wastes capacity that could go toward targets who actually need moving. What\'s warranted here is locking in their support publicly through a pledge so it\'s on record before the next session, and maintaining the relationship so they remain engaged champions rather than passive supporters.</p><p>There\'s also a targeting question worth asking: are there legislators you\'re not currently including who are genuinely on the fence? A target list with only supporters often means the fence-sitters haven\'t been identified yet — and those are the people an influence program is actually designed for.</p><p>One possible exception: a supportive legislator who needs political "cover" for their position. Any good legislator will ask for cover — it\'s our job to interpret who actually needs it. Of all of our supporters in a particular state legislature, maybe one or two have a legitimate need for cover. In those specific cases, constituent visibility and public expressions of support can be useful. But this is the exception, not the rule.</p>';
+        if(any_swing(a)) r.body+='<p>If any of these legislators are in competitive seats and your thinking is turning toward helping them win re-election, that\'s a legitimate goal — but it\'s a partisan engagement conversation, not an influence program. Bring it to Patrick.</p>';
+        r.tactics='<div class="sec-lbl" style="margin-top:1.25rem">More appropriate tools</div><div class="tcards">'+tc('Candidate pledge','Ask each supporter to sign a public pledge committing to support MAID legislation in the next session. A signed pledge is harder to walk back than a stated position, gives you something concrete to reference in future sessions, and signals to the legislator that their support is tracked and valued.',true)+tc('Relationship maintenance','Regular check-ins from your lobbyist or state staff — not to ask for anything, but to share updates on the issue, thank them for past support, and keep MAID on their radar heading into the next session. Supporters who feel ignored drift; supporters who feel connected stay engaged.')+'</div>';
+        r.steps=[
+          'Review your full legislative landscape: are there fence-sitters you\'re not currently targeting? If so, those should probably be on this list instead of or alongside the supporters.',
+          'Work with Patrick to develop or use existing pledge language — a short written commitment to support MAID legislation in the next session that legislators can sign and that becomes part of your public record.',
+          'Have your lobbyist or state staff reach out individually to each supporter to request the pledge — a personal ask from someone they know gets a much higher response rate than a mass email.',
+          'For anyone who declines the pledge, note the reason and flag for follow-up — a supporter who won\'t sign a pledge is a softer supporter than you thought.',
+          'Schedule at least one lobbyist or staff touchpoint with each supporter between now and the next session — share a relevant news item, thank them for a past action, or invite them to an event.',
+          'If any supporters are in competitive seats and you want to think about electoral engagement on their behalf, bring that conversation to Patrick separately.'
+        ];
+        r.gaps=['I need help developing pledge language that is specific enough to be meaningful.','I may need help thinking through whether any of my targets need political cover and what that would look like.','If any supporters are in competitive seats, I want to discuss whether electoral engagement makes sense.'];
+
+      } else if(pos==='all_oppose'){
+        r.badge='Reconsider your target list';r.bs='background:#FAEEDA;color:#412402';r.ic='amb';
+        r.title='All opponents — a constituent pressure program is unlikely to be the right tool here.';
+        r.intro='This target list has strategic challenges worth thinking through before designing any program.';
+        r.body='<p>A program aimed only at hardened opponents is unlikely to produce position changes in a single cycle. People who have staked out opposition on MAID have made a political calculation that the issue won\'t cost them — and a constituent email or town hall question, while valuable over time, rarely flips that calculation quickly.</p><p>That doesn\'t mean there\'s nothing to do. But the question is whether a formal volunteer program is the right activity, or whether lobbyist-level accountability work — documenting their opposition, maintaining pressure through direct staff contact, identifying what would need to change for them to move — is a better use of capacity right now.</p><p>There\'s also a targeting question worth asking: are there legislators you\'re not currently including who are genuinely on the fence? A target list with only opponents often means the fence-sitters haven\'t been identified yet — and those are the people an influence program is actually designed for.</p>';
+        if(seats==='all_swing') r.cos.push({t:'amb',m:'With all opponents in competitive seats, a formal program raises the compliance bar significantly — it starts to look electoral regardless of stated intent. If you want to proceed, that design conversation needs to happen with Patrick before anything is built.'});
+        r.steps=[
+          'Ask your lobbyist: are there any legislators on this list who are softer in their opposition than they appear publicly? Private opposition is different from committed opposition — a legislator who votes no but doesn\'t actively campaign against MAID is a potential long-term target.',
+          'Review your full legislative landscape: are there fence-sitters you\'re not currently targeting? If so, those should probably be on this list instead of or alongside the opponents.',
+          'For opponents you want to maintain pressure on, work with your lobbyist on a relationship and accountability strategy — regular direct contact, tracking their public statements, identifying any shifts in their position over time.',
+          'If any opponents are in competitive seats and you want to think about electoral engagement, that\'s a partisan conversation — bring it to Patrick with a clear strategic rationale.',
+          'Return to this tool if your target list changes to include fence-sitters — the program design will look very different.'
+        ];
+        r.gaps=['I need help assessing whether any of these opponents are softer in their opposition than they appear publicly.','I need help determining whether lobbyist-level accountability work or a more formal program is the right approach for these targets.','If any opponents are in competitive seats, I may want to discuss electoral engagement options.'];
+
+      } else {
+        if(seats==='all_swing'){
+          r.badge='Compliance flag — reconsider';r.bs='background:#FCEBEB;color:#A32D2D';
+          r.title='No fence-sitters in competitive seats only: this looks electoral regardless of stated intent.';
+          r.intro='A program touching only competitive races with no genuine influence targets is the clearest compliance concern in this tool.';
+          r.body='<p>Supporters don\'t need influencing. Opponents in competitive seats are difficult to move through constituent pressure alone. When a program targets only competitive races and has no one genuinely on the fence, it reads as electoral regardless of how it\'s described — because there\'s no credible issue-influence rationale left to point to.</p><p>This doesn\'t mean you can\'t do anything. But what you do next needs to either (a) change the target list to include genuine fence-sitters, or (b) have an honest conversation with Patrick about whether what you\'re actually trying to do is electoral engagement, which is a legitimate path with its own process.</p>';
+          r.cos.push({t:'amb',m:'This combination presents the most significant compliance concern in this planner. It\'s not a hard stop — but it requires a frank conversation with Patrick before any program is designed, and a clear-eyed assessment of what the program is actually for.'});
+          r.steps=[
+            'Before talking to Patrick, do an honest gut-check: is the real goal to move these legislators\' positions on MAID, or to affect the outcome of their races? The answer shapes what kind of conversation you need to have.',
+            'If the goal is influence: review your full legislative landscape for fence-sitters you\'re not currently targeting — a target list with only supporters and opponents in competitive seats often means the genuinely persuadable people haven\'t been identified yet.',
+            'Ask your lobbyist: are any of the "opponents" on your list softer in their opposition than they appear? A legislator who votes no but hasn\'t actively campaigned against MAID is different from a committed opponent.',
+            'If the goal is electoral engagement: bring that directly to Patrick with your strategic rationale — which races, why they matter to your legislative path, and what you\'re hoping to accomplish.',
+            'Do not design or launch any program from this target list without talking to Patrick first.'
+          ];
+          r.gaps=['My honest goal for this program is: [needs to be stated clearly before our meeting — position influence vs. electoral engagement].','I need help either (a) identifying genuine fence-sitters to add to this list, or (b) understanding the partisan engagement process if electoral engagement is the real goal.'];
+        } else {
+          r.badge='No influence targets';r.bs='background:#FAEEDA;color:#412402';r.ic='amb';
+          r.title='A mix of supporters and opponents with no fence-sitters doesn\'t have a clear influence rationale.';
+          r.intro='There\'s no one to actually influence here in the way this type of program is designed to work.';
+          r.body='<p>Influence programs need targets whose positions can be moved. A list of only supporters and opponents doesn\'t give the program a legitimate purpose — supporters don\'t need influencing, and opponents without a competitive race to make them responsive are unlikely to be moved by constituent pressure alone in the near term.</p><p>The good news is that both groups warrant some activity — just different activity. Supporters need pledge work and relationship maintenance. Opponents need lobbyist-level accountability tracking. Positive or negative public accountability programs could further our goals with the respective camps. Neither requires a formal volunteer program right now.</p><p>The more important question is whether there are fence-sitters in your state\'s legislative landscape that you\'re not currently aware of. If your lobbyist and your session debrief suggest that everyone has a firm position, that\'s useful information. If there might be persuadable people you haven\'t identified yet, that\'s the work to do before coming back to this tool.</p>';
+          r.steps=[
+            'Ask your lobbyist directly: is there anyone in our target landscape who is genuinely persuadable right now, even if they haven\'t shown it publicly? Soft opponents and quiet fence-sitters often don\'t appear on lists until someone asks.',
+            'For supporters on your list: pursue pledge commitments and schedule relationship-maintenance touchpoints with your lobbyist or state staff before the next session.',
+            'For opponents on your list: work with your lobbyist on an accountability tracking approach — document their positions, monitor any public statements, and identify what would need to change for them to move over a longer time horizon.',
+            'If this assessment confirms that everyone truly has a firm position, note that in your campaign plan and focus electoral capacity on other aspects of your legislative strategy.',
+            'Return to this tool if fence-sitters emerge — the program design will look quite different.'
+          ];
+          r.gaps=['I need help identifying whether there are fence-sitters in my state\'s legislative landscape that I\'m not currently aware of.','I need help deciding between pledge work (for supporters), lobbyist accountability tracking (for opponents), and whether any public accountability program makes sense for either group.'];
+        }
+      }
+
+    } else if(a.composition==='has_non_inc'){
+      const cseats=a.cand_seats;
+      const cpos=a.cand_pos;
+
+      if(cseats==='all_safe'){
+        r.badge='Wrong conditions for ATC';r.bs='background:#FAEEDA;color:#412402';r.ic='amb';
+        r.title='Candidates in safe seats aren\'t responsive to ATC-style pressure.';
+        r.intro='Without the official capacity option, safe-seat candidates don\'t give you much to work with through an influence program.';
+        r.body='<p>ATC works because candidates in competitive races are actively courting voters and are more open to constituent pressure — every contact matters to someone trying to win a close race. Candidates in safe seats don\'t face that dynamic. They\'re not campaigning hard, and a constituent email asking their position on MAID is unlikely to move them in any meaningful way.</p><p>If any of your targets are currently serving legislators, official capacity work may still be available for those individuals — town halls, constituent coffees, and community events where their MAID record is fair game regardless of the electoral landscape. Return to this tool and run the legislators-only path for that portion of your list.</p><p>For candidates who are not currently serving and are in safe seats, the most useful activity is likely staff outreach to establish a relationship and get their position on record — not a volunteer program.</p>';
+        r.steps=[
+          'Separate your list into two groups: candidates who are currently serving legislators, and candidates who are not.',
+          'For sitting legislators on your list: return to this tool, select "Influence legislators and/or candidates" at the first question, and run the legislators-only path — official capacity work may be available for them.',
+          'For non-incumbent candidates in safe seats: have staff or your lobbyist reach out directly to get their position on record; this is relationship-building and intelligence-gathering, not an influence program.',
+          'Assess whether your target list should include any competitive-seat candidates — if there are open or competitive seats that matter to your legislative path, those are where ATC-style work is effective; consider whether to add them.',
+          'If after this assessment your list still consists only of safe-seat non-incumbents, document their positions through staff outreach and save the formal program capacity for a cycle where the conditions are better.'
+        ];
+        r.gaps=['I need help assessing whether any sitting legislators on my list qualify for official capacity work — and if so, what that would look like.','I need help determining whether there are competitive-seat candidates I should add to my target list before ruling out ATC entirely.'];
+
+      } else if(cpos==='all_support'){
+        r.badge='Position secured — different tools now';r.bs='background:#E1F5EE;color:#0F6E56';
+        r.title='They\'re already on our side. ATC isn\'t the right tool here.';
+        r.intro='When candidates already support MAID, the work shifts from influence to securing that commitment on the record.';
+        r.body='<p>Spending capacity on an influence program aimed at people who already support your position is waste. The more useful question is how to make that support durable — a public pledge creates an accountability hook that outlasts the election and gives you something concrete to point to once they\'re in office. A supporter who hasn\'t made a public commitment is a softer supporter than one who has.</p><p>There\'s also a targeting question worth asking: are there candidates you\'re not currently including who are genuinely on the fence? A target list with only supporters often means the fence-sitters haven\'t been identified yet.</p><p>If your thinking is turning toward helping these candidates win their races, that\'s a legitimate goal but a different conversation — one that starts with Patrick, not this tool.</p>';
+        r.tactics='<div class="sec-lbl" style="margin-top:1.25rem">Tools for this path</div><div class="tcards">'+tc('Candidate pledge','A short written commitment to support MAID legislation if elected. Work with Patrick to develop standard pledge language. Have staff or your lobbyist reach out personally to request the pledge — a personal ask gets a much better response rate than a mass email. Document every response.',true)+tc('Candidate questionnaire','If a candidate\'s support hasn\'t been formally stated on the record, a written questionnaire asking their position creates a paper trail and a public record that can be referenced in future sessions. Decide in advance whether responses will be public or private.')+'</div>';
+        r.steps=[
+          'Review your candidate landscape: are there fence-sitters you\'re not currently targeting? If so, those should probably be on this list.',
+          'Work with Patrick to develop or use existing pledge language — make sure it\'s specific enough to be meaningful but simple enough that a campaign will actually sign it.',
+          'Have staff or your lobbyist reach out personally to each candidate to request the pledge — explain why it matters and what you\'ll use it for.',
+          'For any candidate who declines or doesn\'t respond, note the reason — a supporter who won\'t sign a pledge is worth flagging; it may indicate softer support than you thought.',
+          'For candidates whose support hasn\'t been formally stated on the record, send a candidate questionnaire first to establish the position, then follow up with a pledge request.',
+          'Document all pledges and questionnaire responses in your tracking system — these become part of your legislative accountability record in future sessions.',
+          'If your goal extends to helping these candidates win their races, bring that conversation to Patrick separately.'
+        ];
+        r.gaps=['I need help developing pledge language and deciding whether responses should be public or private.','I may want to discuss whether there are fence-sitters I am missing — and if so, what program would fit.','If my goal extends to helping these candidates win, I want to explore what partisan engagement options are available in my state.'];
+
+      } else if(cpos==='all_oppose'){
+        r.badge='Hardened opposition';r.bs='background:#FCEBEB;color:#A32D2D';
+        r.title='Candidates with hardened opposition are difficult ATC targets.';
+        r.intro='Constituent pressure works best on people who are genuinely persuadable — someone who has staked out opposition has made a calculation that your issue won\'t cost them.';
+        r.body='<p>That doesn\'t mean there\'s nothing to do. Sustained constituent pressure over a campaign cycle can shift tone even when it doesn\'t flip a stated position — a candidate who hears repeatedly from constituents about MAID may soften their public rhetoric, become less active in opposing legislation, or reconsider their calculus before the next session. But go in with realistic expectations: this is a long-game play measured in cycles, not a quick conversion before election day.</p><p>There\'s also a targeting question worth asking before committing to this: are there candidates you\'re not currently including who are on the fence? A target list of only opponents often means the genuinely persuadable people haven\'t been identified yet — and those are where ATC is actually designed to work.</p><p>If what\'s really driving this is wanting to affect the electoral outcome — supporting a challenger, running activity designed to create contrast — that\'s partisan engagement. Bring it to Patrick.</p>';
+        if(a.stakes==='minor') r.body+='<p>Given that you\'re uncertain how these races connect to your legislative goals, the case for spending capacity on a difficult long-game play here is particularly weak. Consider whether this is the right cycle to engage, or whether capacity is better concentrated elsewhere.</p>';
+        r.steps=[
+          'Before committing to ATC against hardened opponents, ask: is there anyone on your state\'s electoral landscape who is actually on the fence that you\'re not targeting? A target list of only opponents often means fence-sitters haven\'t been found yet.',
+          'For each opponent, assess honestly: is their opposition hardened and public, or is it soft and private? A candidate who has stated opposition but hasn\'t campaigned on it is a more viable long-game target than one who is vocal.',
+          'If you want to proceed with ATC against opponents, bring a clear rationale to Patrick: which candidates, why they\'re worth the capacity, and what a realistic success looks like over multiple cycles — not just this one.',
+          'If your thinking is turning toward electoral engagement — supporting challengers or running contrast activity — bring that to Patrick as a partisan engagement conversation before doing anything.',
+          'Document these candidates\' positions and any shifts over time regardless of whether you run a formal program — that record becomes useful in future cycles.'
+        ];
+        r.gaps=['I need help assessing whether a long-game ATC program against these opponents is worth the capacity — and what realistic success looks like.','I need help identifying whether there are fence-sitters I am missing that should be the real targets.','If my thinking is turning toward electoral engagement against these opponents, I want to understand what is permissible in my state.'];
+
+      } else if(cpos==='mix_w_fence'||cpos==='all_fence'){
+        if(a.stakes==='minor'){ r=rLowPriority(); }
+        else if(a.vols==='thin'){ r=rCapacityGap(); }
+        else {
+          r.badge='ATC conditions met';r.bs='background:#E1F5EE;color:#0F6E56';
+          r.title='The conditions are right for ATC. Now the work is connecting it to your specific legislative barrier.';
+          r.intro='You have the right races, the right candidate dynamics, and the capacity to execute. The next step is a planning meeting with Patrick — but you\'ll get a lot more out of that conversation if you\'ve worked through the questions below first.';
+          r.body='<p>ATC is one tool among several. Before locking in the program, consider whether it\'s truly the best fit for each specific target on your list, or whether something with less capacity might accomplish a similar goal. A candidate questionnaire, a pledge ask, digital-first outreach, or candidate education materials may get most of the way there for lower-priority targets, while your highest-priority targets get the full depth of ATC. Think about your list in tiers: Tier 1 gets full ATC, Tier 2 gets a lighter but still meaningful program, Tier 3 gets whatever keeps visibility with minimal operational cost. Make the tier assignment explicit and justify it.</p><p>ATC works when it\'s aimed precisely at a specific legislative problem. "The senate killed our bill" is not specific enough. Before you can design an effective program, you need to be able to articulate the barrier with enough precision that you can explain exactly how pressuring a specific candidate in a specific race moves that barrier.</p><p>Here\'s the diagnostic: imagine the ATC program works perfectly — the candidates feel the constituent pressure, some of them shift toward supporting MAID, maybe one or two win their races. What has changed about your legislative situation? If you can\'t answer that in concrete terms — this committee now has a different composition, this vote count shifts, this caucus leader has less cover to block — the program isn\'t connected to the barrier yet.</p><p>One important distinction on how volunteers should frame their ask: "Do you support MAID?" is primarily an information-gathering question. "Will you support authorizing medical aid in dying if elected?" or "Will you support a bill like Senate Bill X that would authorize MAID with important safeguards?" are influence-oriented questions — they put a candidate on record and create accountability. The right level of specificity depends on the state, the race, and what the candidate knows about the issue. But the ask should always be framed as a "will you" — not a "do you."</p>';
+          if(cseats==='all_swing') r.cos.push({t:'amb',m:'Your target list is all competitive races. That\'s not automatically a problem when candidates are genuinely on the fence — the influence rationale is defensible. But targeting only competitive races raises the compliance bar. The program needs to be designed intentionally with compliance factored in throughout. Make this a specific agenda item in your planning meeting with Patrick.'});
+          if(cpos==='mix_w_fence') r.cos.push({t:'grn',m:'With a mix of positions in your list, focus the active ATC work on fence-sitters. For supporters, pursue a pledge to lock in their position. The program\'s legitimacy comes from being genuinely aimed at people who can be moved.'});
+          r.tactics='<div class="sec-lbl" style="margin-top:1.25rem">Questions to work through before meeting with Patrick</div><div class="tcards">'+
+          tc('What is the specific legislative barrier?','Not "we need more support" — is the issue a vote count problem in one chamber? A committee chair blocking a hearing? A caucus leadership dynamic? A specific member whose position is the swing vote? Is the problem outright opposition or unwillingness to spend political capital on the issue? The answer to this question should drive every targeting decision.',true)+
+          tc('For each target district: how does this race connect to that barrier?','A target is only as good as the theory connecting it to the legislative problem. For each race, complete this sentence: "Winning a commitment from [candidate] in [district] advances our legislative goal because ___." If you can\'t complete it, the target isn\'t justified yet.')+
+          tc('Who is the candidate, and who is their opponent?','Know both sides of every race on your list. Does the opponent support MAID? Is there a primary challenger? The dynamics of the full race shape what ATC activity looks like and whether it\'s the right tool.')+
+          tc('What do you know about what influences this candidate specifically?','Generic constituent pressure is less effective than pressure that connects to something the candidate specifically cares about — their district\'s demographics, a personal connection to end-of-life issues, a donor relationship. What do you know about this candidate that makes you think constituent contact on MAID will move them?')+
+          tc('What is their current position, and how do you know?','If you\'re saying "on the fence," be specific about what that means — have they declined to answer? Given a vague non-answer? Expressed private sympathy but public neutrality? The nuance matters for how you design the ask.')+
+          tc('Who are the named volunteers in each district?','Not "we have supporters there" — actual people, with names, who have taken action before or expressed interest in doing more. A program without named volunteers isn\'t a program yet.')+
+          tc('What is your timeline?','Work backward from the election date. When do primaries close? When does early voting start? What is the last useful date for constituent contact to have any influence? What needs to be built before you can launch?')+
+          tc('How will volunteers report back — and do they need to?','Ask yourself first: is volunteer reporting actually important for this program? The core goal of ATC is constituent pressure on a target — the act of contact is the value, not necessarily the information gathered. If reporting is important, what specific information do you need, and is it worth the additional ask of volunteers? If yes, keep it as light as possible — a quick call or text from a staffer asking "how did it go?" is often more effective than a formal form. The more complicated the reporting process, the less likely volunteers are to do it.')+'</div>'+
+          '<div class="sec-lbl" style="margin-top:1.25rem">What Patrick can provide</div><div class="tcards">'+
+          tc('Program design and compliance coordination','Patrick will help you design the specific program structure and work through the compliance picture for your state before anything launches. He\'s willing to do real work alongside you — research, plan development, lobbyist conversations — not just point you in a direction.',true)+
+          tc('Candidate questionnaire or pledge development','Patrick can help develop candidate questionnaire or pledge language. Deciding whether responses are public or private, and sending those materials to candidates, is the in-state person\'s responsibility.')+
+          tc('Volunteer-facing materials','Patrick and Sara can develop volunteer-facing materials — emails, action alerts, and report-back processes — once the program design is locked in.')+'</div>';
+          r.cos.push({t:'grn',m:'The most common execution failure in a well-targeted ATC program is not building the volunteer follow-up process before launch. Think through this in advance: if a volunteer makes contact and learns something meaningful, what happens next? Who do they tell, how quickly, and how does that information change anything? Keep the ask light — a quick check-in call from a staffer often works better than a formal form.'});
+          r.cos.push({t:'amb',m:'A note on intent: ATC is a position-influence program. If the reason you\'re running it is to affect who wins a race — even as a secondary goal — that changes the legal character of the program. Intent matters. If electoral outcomes are part of the thinking, name that in the planning conversation with Patrick before you build anything.'});
+          r.steps=[
+            'Work through the pre-meeting questions above and write down your answers — a one-page document covering the legislative barrier, the targeting rationale for each district, and your named volunteers is the ideal thing to bring to Patrick.',
+            'Assign each target to a tier: Tier 1 (full ATC), Tier 2 (lighter program — questionnaire, pledge, digital outreach, candidate education), Tier 3 (broadcast or passive visibility). Make the tier assignment explicit with a rationale.',
+            'For each target district, write one sentence completing: "Winning a commitment from [candidate] in [district] advances our legislative goal because ___." Cut any district where you can\'t complete the sentence.',
+            'Confirm named volunteer contacts in each district — reach out personally to verify their interest and availability before the planning meeting.',
+            'Build a simple tracking spreadsheet: candidate name, district, race type, current position, volunteer contact, outreach method, and a column for responses.',
+            'Schedule a planning meeting with Patrick — bring your one-page rationale document, the tiered target list, the tracking spreadsheet skeleton, and any position intelligence you already have.',
+            'Do not launch any public-facing activity before the compliance picture is clear and the program design is locked in with Patrick.'
+          ];
+          r.gaps=[
+            'Specific legislative barrier: [what exactly is blocking MAID — committee, caucus, vote count, caucus leadership, unwillingness to spend political capital?]',
+            'For each target district: [how does this race connect to that barrier — complete the sentence "Winning a commitment from [candidate] in [district] advances our goal because ___"]',
+            'Candidate and opponent: [who is in each race, does the opponent support MAID, is there a primary challenger?]',
+            'Current position and how I know it: [on the fence means what specifically — declined to answer, vague non-answer, private sympathy but public neutrality?]',
+            'Named volunteers: [actual people with names who have taken action before in each target district]',
+            'Timeline: [election date, primary close date, early voting start, last useful date for constituent contact]',
+            'Tier assignments: [which targets get full ATC, which get a lighter approach, which get broadcast-level visibility only?]',
+            'Volunteer follow-up process: [do volunteers need to report back, and if so, what is the lightest-weight way to collect that information?]'
+          ];
+        }
+
+      } else {
+        if(cseats==='all_swing'){
+          r.badge='Compliance flag — reconsider';r.bs='background:#FCEBEB;color:#A32D2D';
+          r.title='No fence-sitters in competitive races only: this looks electoral regardless of stated intent.';
+          r.intro='Without genuine influence targets, a program focused only on competitive races has no defensible issue-influence rationale.';
+          r.body='<p>Supporters don\'t need influencing. Opponents in competitive races are difficult to move through ATC alone. When a program targets only competitive races and has no one genuinely on the fence, it reads as electoral regardless of how it\'s described — because there\'s no credible issue-influence rationale to point to.</p><p>This is the clearest compliance concern in this planner. Before designing anything, do a gut-check: is the goal to influence these candidates\' positions on MAID, or to affect who wins these races? Both are legitimate goals — but the second one is a partisan engagement conversation that requires a different process. Bring it to Patrick.</p>';
+          r.cos.push({t:'amb',m:'This combination presents the most significant compliance concern in this planner. It\'s not a hard stop — but it requires a frank conversation with Patrick before any program is designed, and a clear-eyed assessment of what the program is actually for.'});
+          r.steps=[
+            'Do a gut-check before anything else: is the real goal to move these candidates\' positions on MAID, or to affect the outcome of their races? Name it honestly — the answer shapes what kind of conversation you need to have with Patrick.',
+            'If the goal is influence: review your candidate landscape for fence-sitters you\'re not currently targeting — a list of only supporters and opponents in competitive seats often means the genuinely persuadable candidates haven\'t been identified yet.',
+            'Talk to your lobbyist or any existing contacts with these campaigns: are any of the "opponents" softer in their opposition than they appear publicly? Private opposition is different from committed opposition.',
+            'If the goal is electoral engagement: bring that directly to Patrick with your strategic rationale — which races, why they matter to your legislative path, and what you\'re hoping to accomplish.',
+            'Do not design or launch any program from this target list without talking to Patrick first.'
+          ];
+          r.gaps=['My honest goal for this program is: [needs to be stated clearly before our meeting — position influence vs. electoral engagement].','I need help either (a) identifying genuine fence-sitters to add to this list, or (b) understanding the partisan engagement process if electoral engagement is the real goal.'];
+        } else {
+          r.badge='No influence targets';r.bs='background:#FAEEDA;color:#412402';r.ic='amb';
+          r.title='A mix of supporters and opponents with no fence-sitters doesn\'t have a clear influence rationale.';
+          r.intro='There\'s no one to actually influence here in the way ATC is designed to work.';
+          r.body='<p>ATC needs targets whose positions can be moved. A list of only supporters and opponents doesn\'t give the program a legitimate purpose. Pledge work for supporters and staff-level accountability outreach for opponents is more appropriate than a formal constituent pressure program right now.</p><p>The more important question is whether there are fence-sitters in your candidate landscape that you\'re not aware of yet. If your lobbyist and your outreach suggest that everyone has a firm position, that\'s useful information — it means ATC probably isn\'t the right tool this cycle. If there might be persuadable candidates you haven\'t found yet, that\'s the work to do.</p>';
+          r.steps=[
+            'For supporters on your list: pursue pledge commitments — a personal ask from staff or your lobbyist gets a much better response rate than a mass email; document every response.',
+            'For opponents on your list: have staff or your lobbyist reach out to establish a position on the record and start a relationship — even a "no" from a campaign contact is intelligence worth having.',
+            'Ask your lobbyist: are there candidates in your state\'s landscape who are genuinely on the fence on MAID but not currently on your list? This is the question that matters most before deciding whether ATC is available to you this cycle.',
+            'If fence-sitters emerge through this outreach, return to this tool — the program design will look quite different.',
+            'If the landscape is truly all supporters and opponents with no fence-sitters, document that assessment and focus your electoral capacity on other aspects of your legislative strategy this cycle.'
+          ];
+          r.gaps=['I need help identifying whether there are fence-sitters in my candidate landscape I am not currently aware of.','I need help deciding between pledge work (for supporters) and staff-level accountability outreach (for opponents) — and whether any public accountability program makes sense.'];
+        }
+      }
+    }
+  }
+
+  let html=sumHtml();
+  if(!r.badge) return;
+  html+='<span class="badge" style="'+r.bs+'">'+r.badge+'</span>';
+  html+='<div class="rtitle">'+r.title+'</div>';
+  if(r.intro) html+='<div class="rintro '+r.ic+'">'+r.intro+'</div>';
+  html+='<div class="body-text">'+r.body+'</div>';
+  r.cos.forEach(c=>{html+='<div class="co '+c.t+'">'+c.m+'</div>';});
+  if(r.tactics) html+=r.tactics;
+  if(r.steps.length) html+='<div class="sec-lbl" style="margin-top:1.5rem">Suggested next steps</div><div class="steps">'+r.steps.map((s,i)=>si(i+1,s)).join('')+'</div>';
+  html+=PNOTE;
+  if(['Official capacity program','Mixed-seat program','Two distinct paths available','ATC conditions met'].includes(r.badge)){
+    html+='<div class="co grn"><strong>Don\'t have all the answers yet?</strong> That\'s fine — bring what you have to Patrick and work through the rest together. The pre-meeting questions are a target, not a gate. The point is to come in with as much as you can so the conversation is productive, not to have everything figured out before you reach out.</div>';
+  }
+  if(['Official capacity program','Mixed-seat program','Two distinct paths available'].includes(r.badge)){
+    html+='<div class="co blu"><strong>A note on legislative accountability:</strong> Official capacity constituent pressure — volunteers at town halls, coffees, and community events asking legislators about their MAID record — is also a form of legislative accountability. This kind of activity can and should connect to your session-year campaign plan, not just the electoral calendar. If you\'re running an accountability strategy during session, this is a natural extension of it.</div>';
+  }
+  html+='<div class="pnote" style="margin-top:1rem;border-left:3px solid #1D9E75;background:#E1F5EE;color:#085041"><strong>Need help with this?</strong> Email Patrick at <a href="mailto:pmassaro@candcactionnetwork.org" style="color:#085041">pmassaro@candcactionnetwork.org</a> — copy and paste the summary at the top of this page into your email so he has your answers and where you landed.</div>';
+  html+='<div class="restart"><button class="btn" onclick="restart()">Start over with a different scenario</button></div>';
+
+  document.getElementById('scr').innerHTML='';
+  const res=document.getElementById('res');
+  res.style.display='block';
+  res.innerHTML=html;
+  setPf();
+}
+
+// helper — true if any swing seats in current leg path
+function any_swing(a){
+  return a.leg_seats==='all_swing'||a.leg_seats==='mixed_seats';
+}
+
+renderIntro();
+</script>
+</body>
+</html>
